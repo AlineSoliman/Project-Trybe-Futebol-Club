@@ -76,13 +76,13 @@ describe('Testa login', () => {
             email: '',
             password: '',
           });
-          
+
         expect(response.status).to.be.equal(400);
       });
   
     });
   
-    describe('Testa em caso de usuário com senha incorreta', () => {
+    describe('Testa se usuário não forneceu senha senha', () => {
   
       before(async () => {
         sinon.stub(UserModel, 'findOne').resolves({
@@ -98,10 +98,31 @@ describe('Testa login', () => {
       it('Verifica se retorna erro com status 401', async () => {
         const response: Response = await chai.request(app).post('/login').send({
             email: 'email@email.com',
-            password: 'senhaerrada',
+            password: '',
           });
   
-          expect(response.status).to.be.equal(401);
+          expect(response.status).to.be.equal(400);
+      });
+
+      describe('Verifica caso não seja passado os dados do usuário para login', () => {
+
+        it('Verifica se retorna status 400', async () => {
+          const response: Response = await chai.request(app).post('/login');
+    
+          expect(response.status).to.be.equal(400);
+          expect(response.body.message).to.be.equal('All fields must be filled');
+        });
+    
+      });
+      describe('Testa se o token é undefined', () => {
+
+        it('Verifica se retorna um status 404', async () => {
+    
+          const response: Response = await chai.request(app).get('/login/validate')
+    
+          expect(response.status).to.be.equal(404);
+          expect(response.body.message).to.be.equal('Token not found.');
+        });
       });
   
     });
