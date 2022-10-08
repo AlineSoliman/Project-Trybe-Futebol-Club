@@ -1,13 +1,22 @@
 import { Request, Response } from 'express';
 import UserService from '../Service/UserService';
-// import VeryfyPassword from '../Service/Validations/VerifyPassword';
 
+// interface newError {
+//   message: string;
+// }
 export default class UserController {
-  public login = async (request: Request, response: Response) => {
-    // await VeryfyPassword.validateLogin(request.body);
-    const token = await UserService.login(request.body);
-    // console.log(token);
-    response.status(200).json({ token });
+  public login = async (req: Request, res: Response) => {
+    try {
+      const token = await UserService.login(req.body);
+      if (req.body.email === '' || req.body.password === '') {
+        return res.status(400).send({ message: 'All fields must be filled' });
+      }
+      if (token) return res.status(200).json({ token });
+    } catch (error) {
+      // const { message } = error as newError;
+      // console.log(message);
+      return res.status(500).json({ message: 'Erro' });
+    }
   };
 
   public getAllUsers = async (_req:Request, res: Response) => {
@@ -15,9 +24,9 @@ export default class UserController {
     return res.status(200).json(user);
   };
 
-  public verifyUser = async (request: Request, response: Response): Promise<void> => {
-    const { authorization } = request.headers;
+  public verifyUser = async (req: Request, res: Response): Promise<void> => {
+    const { authorization } = req.headers;
     const auth = await UserService.verifyUser(String(authorization));
-    response.status(200).json({ auth });
+    res.status(200).json({ auth });
   };
 }
