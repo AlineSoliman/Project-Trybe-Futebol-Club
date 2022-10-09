@@ -15,12 +15,6 @@ export default class MatchController {
     response.status(200).json(result);
   }
 
-  public static async updateMatch(request: Request, response: Response) {
-    const { id } = request.params;
-    const result = await MatchService.updateMatch(Number(id), request.body);
-    response.status(200).json(result);
-  }
-
   public static async getAllProgress(
     inProgress: string,
     response: Response,
