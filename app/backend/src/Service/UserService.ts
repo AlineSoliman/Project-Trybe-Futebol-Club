@@ -11,11 +11,10 @@ export default class UserService {
       where: { email },
     });
     if (!userData) {
-      // throw new Error('401|Incorrect email or password');
-      return { code: 401, message: 'Incorrect email or password' };
+      return undefined;
     }
     if (!Bcrypt.comparePassword(password, userData.password)) {
-      return { code: 401, message: 'Incorrect email or password' };
+      return undefined;
     }
 
     const { id, role } = userData;
