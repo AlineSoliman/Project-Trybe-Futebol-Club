@@ -5,7 +5,6 @@ import ILogin from '../Interface/ILogin';
 
 export default class UserService {
   public static login = async (infoLogin: ILogin) => {
-    console.log(infoLogin.email);
     const { email, password } = infoLogin;
     const userData = await User.findOne({
       where: { email },
@@ -30,7 +29,8 @@ export default class UserService {
   };
 
   public static verifyUser = async (token: string) => {
-    const validation = TokenValidate.validateToken(token);
-    return validation;
+    const validation = await TokenValidate.validateToken(token);
+    console.log(validation, 'validation');
+    return { role: validation };
   };
 }
