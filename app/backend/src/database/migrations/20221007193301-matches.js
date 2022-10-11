@@ -13,7 +13,8 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         field: "home_team",
-        references: {
+        foreingKey: true,
+        dependences: {
           model: "teams",
           key: "id",
         },
@@ -27,7 +28,8 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         field: "away_team",
-        references: {
+        foreingKey: true,
+        dependences: {
           model: "teams",
           key: "id",
         },
@@ -38,8 +40,7 @@ module.exports = {
         field: "away_team_goals",
       },
       inProgress: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
+        type: Sequelize.BOOLEAN,
         field: "in_progress",
       },
     });
