@@ -15,7 +15,7 @@ export default class UserController {
       }
       if (!token) return res.status(401).json({ message: 'Incorrect email or password' });
 
-      return res.status(200).json(token);
+      return res.status(200).json({ token });
     } catch (error) {
       next(error);
     }
@@ -26,9 +26,9 @@ export default class UserController {
     return res.status(200).json(user);
   };
 
-  public verifyUser = async (req: Request, res: Response): Promise<void> => {
+  public verifyUser = async (req: Request, res: Response): Promise<any> => {
     const { authorization } = req.headers;
     const auth = await UserService.verifyUser(String(authorization));
-    res.status(200).json({ auth });
+    return res.status(200).json(auth);
   };
 }
