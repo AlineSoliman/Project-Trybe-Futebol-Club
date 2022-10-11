@@ -31,6 +31,7 @@ describe('Testa login', () => {
         });
 
         expect(response.status).to.be.equal(401);
+        expect(response.body.message).to.be.equal('Incorrect email or password');
     });
 
   });
@@ -49,13 +50,14 @@ describe('Testa login', () => {
         (UserModel.findOne as sinon.SinonStub).restore();
       });
   
-      it ('Verifica se retorna um token com status 200', async () => {
+      it ('Verifica se retorna um token', async () => {
         const response: Response = await chai.request(app).post('/login').send({
             email: 'email@email.com',
             password: 'senhasecreta',
           });
   
         expect(response.status).to.be.equal(200);
+        expect(response.body).to.have.key('token');
       });
     });
   
@@ -78,6 +80,8 @@ describe('Testa login', () => {
           });
 
         expect(response.status).to.be.equal(400);
+        expect(response.body.message).to.be.equal('All fields must be filled');
+        expect(response.body).to.have.key('message');
       });
   
     });
@@ -101,7 +105,7 @@ describe('Testa login', () => {
             password: '',
           });
   
-          expect(response.status).to.be.equal(400);
+          expect(response.status).to.be.equal(401);
       });
 
       describe('Verifica caso não seja passado os dados do usuário para login', () => {
@@ -124,7 +128,7 @@ describe('Testa login', () => {
           expect(response.body.message).to.be.equal('Token not found.');
         });
       });
-  
     });
+  
   });
 
