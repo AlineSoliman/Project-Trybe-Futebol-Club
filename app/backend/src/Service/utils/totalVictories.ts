@@ -1,9 +1,9 @@
 import ILeaderboard from '../../Interface/ILeaderboard';
 
-const TotalVictories = async (matches: ILeaderboard) => {
+const TotalVictories = (matches: ILeaderboard) => {
   const totalVictories = matches.teamHome.filter((element: any) =>
     element.homeTeamGoals > element.awayTeamGoals).length;
-  return totalVictories as number;
+  return totalVictories;
 };
 
 export default TotalVictories;

@@ -1,6 +1,6 @@
 import ILeaderboard from '../../Interface/ILeaderboard';
 
-const goalsOwns = async (matches: ILeaderboard) => {
+const goalsOwns = (matches: ILeaderboard) => {
   let goalsOwn = 0;
   matches.teamHome.forEach((element: any) => {
     goalsOwn += element.awayTeamGoals;
