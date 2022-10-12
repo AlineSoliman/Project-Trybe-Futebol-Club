@@ -14,18 +14,24 @@ export default class LeaderbordService {
       as: 'teamHome',
       where: { inProgress: false },
       attributes: ['homeTeamGoals', 'awayTeamGoals'] }] });
-    const allMatches = (Promise.all(board.map(async (match) => ({
-      name: match.teamName,
-      totalPoints: await (TotalVictories(match)) * 3 + await (TotalDraws(match)) * 1,
-      totalGames: await TotalGames(match),
-      totalVictories: await TotalVictories(match),
-      totalDraws: await TotalDraws(match),
-      totalLosses: await TotalGames(match) - await TotalVictories(match) - await TotalDraws(match),
-      goalsFavor: await getGoalsFavors(match),
-      goalsOwn: await goalsOwns(match),
-      goalsBalance: await getGoalsFavors(match) - await goalsOwns(match),
-      efficiency: (((await (TotalVictories(match)) * 3 + await (TotalDraws(match))
-      * 1) / (await TotalGames(match) * 3)) * 100).toFixed(2) }))));
-    return await allMatches as unknown as IBoard[];
+    const allMatches = ((board.map((match) => ({
+      name: match.teamName as string,
+      totalPoints: (TotalVictories(match)) * 3 + (TotalDraws(match)) * 1 as number,
+      totalGames: TotalGames(match) as number,
+      totalVictories: TotalVictories(match) as number,
+      totalDraws: TotalDraws(match) as number,
+      totalLosses: TotalGames(match) - TotalVictories(match) - TotalDraws(match) as number,
+      goalsFavor: getGoalsFavors(match) as number,
+      goalsOwn: goalsOwns(match) as number,
+      goalsBalance: getGoalsFavors(match) - goalsOwns(match) as number,
+      efficiency: ((((TotalVictories(match)) * 3 + (TotalDraws(match))
+      * 1) / (TotalGames(match) * 3)) * 100).toFixed(2) as string,
+    })))) as unknown as IBoard[];
+    return LeaderbordService.sortResult(allMatches);
   };
+
+  static sortResult = (allMatches: IBoard[]) => allMatches.sort((a, b) =>
+    b.totalPoints - a.totalPoints
+    || b.totalVictories - a.totalVictories || b.goalsBalance - a.goalsBalance
+    || b.goalsFavor - a.goalsFavor || b.totalGames + a.totalGames);
 }
