@@ -4,6 +4,7 @@ import db from '.';
 class Team extends Model {
   id!: number;
   teamName!: string;
+  teamHome: any;
 }
 
 Team.init({
